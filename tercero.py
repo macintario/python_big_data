@@ -1,8 +1,9 @@
 import os
 cuenta = dict()
+
 with open(os.path.join('/', 'home', 'yan', 'Descargas', 'TodasLasNoticias.csv'), 'r') as entrada:
-    linea = entrada.readline()
-    while linea:
+    lineas = entrada.readlines()
+    for linea in lineas:
         for palabra in linea.replace(',', ' ').split(" "):
             if palabra in cuenta:
                 cuenta[palabra] += 1
