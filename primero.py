@@ -9,6 +9,7 @@ for j in range(1,50000):
     pares.append(2*j)
     impares.append(2*j-1)
 miDic=dict(losPares=pares,losImpares=impares)
+
 print(miDic)
 print(miDic['losPares'])
 print(miDic['losImpares'])
