@@ -10,3 +10,22 @@ dicc = {
 
 print(dicc)
 print(dicc[3][0]['data4'][4][0])
+
+
+import os
+import csv
+
+
+#def cuentaPalabras(doc)
+palabras={}
+with open(os.path.join('/', 'home', 'aulae1-b6', 'Descargas', 'TodasLasNoticias.csv'), 'r') as entrada:
+    filereader = csv.reader(entrada, delimiter = ',')
+    for doc in filereader:
+        strDoc=' '.join(doc)
+        splitDoc = strDoc.split(" ")
+        for palabra in splitDoc:
+            if palabra not in palabras:
+                palabras[palabra] = 1
+            else:
+                palabras[palabra] += 1
+
