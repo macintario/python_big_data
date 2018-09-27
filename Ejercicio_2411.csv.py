@@ -1,6 +1,7 @@
 import pandas as pd
 
 cars = pd.read_csv("201411.csv")
+cars.to_csv("201411_clean.csv")
 print(cars.describe())
 print(cars.shape)
 print(cars.head())
