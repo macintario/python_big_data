@@ -9,7 +9,7 @@ import scipy.stats as stats
 print("Leer los datos")
 dataPeople = pd.read_csv("clientes.csv")    # Read the data
 print("Extraer variable de genero")
-genero = dataPeople["Is Female"]
+genero = dataPeople["Is Married"]
 print(genero)
 print("Inicializar el modelo de regresion lineal")
 log_model = linear_model.LogisticRegression()
@@ -23,10 +23,11 @@ print("Revisar los coeficientes del modelo")
 print(log_model.coef_)
 print("Realizar la predicción")
 preds = log_model.predict(X = pd.DataFrame(genero))
-accuracy = log_model.score(X=pd.DataFrame(dataPeople["Is Female"]),
+accuracy = log_model.score(X=pd.DataFrame(dataPeople["Is Married"]),
                            y=dataPeople["Buy"])
 print("accuracy")
 print (accuracy)
+
 
 print('########## MULTI ################')
 #normalize income
