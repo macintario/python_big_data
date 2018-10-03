@@ -18,3 +18,4 @@ entrenamiento["Cuartos"]=normaliza_min_max(entrenamiento["Cuartos"])
 entrenamiento["Estacionamiento"]=normaliza_min_max(entrenamiento["Estacionamiento"])
 entrenamiento["Mantenimiento"]=normaliza_min_max(entrenamiento["Mantenimiento"])
 
+''
