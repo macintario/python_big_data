@@ -38,6 +38,35 @@ def obten_distancias_euclidianas(renglon_normalizado,entrenaminento_normalizado)
         distancias.loc[index, "Distancia"] = distancia_renglon
     return distancias
 
+
+def obten_distancias_manhattan(renglon_normalizado,entrenaminento_normalizado):
+    distancias = pd.DataFrame(columns=["Indice","Distancia"])  # type: DataFrame
+    dimensiones = entrenaminento_normalizado.columns
+    for index, row in entrenaminento_normalizado.iterrows():
+        distancia_renglon = 0.
+        for atributo in dimensiones:
+            if atributo != "Invertir":
+                dist_dim = renglon_normalizado[atributo] - row[atributo]
+                distancia_renglon += math.fabs(dist_dim)
+        distancias.loc[index,"Indice"] = index
+        distancias.loc[index, "Distancia"] = distancia_renglon
+    return distancias
+
+
+def obten_distancias_suprema(renglon_normalizado,entrenaminento_normalizado):
+    distancias = pd.DataFrame(columns=["Indice","Distancia"])  # type: DataFrame
+    dimensiones = entrenaminento_normalizado.columns
+    for index, row in entrenaminento_normalizado.iterrows():
+        distancia_renglon = 0.
+        for atributo in dimensiones:
+            if atributo != "Invertir":
+                dist_dim = renglon_normalizado[atributo] - row[atributo]
+                if dist_dim > distancia_renglon :
+                    distancia_renglon = dist_dim
+        distancias.loc[index,"Indice"] = index
+        distancias.loc[index, "Distancia"] = distancia_renglon
+    return distancias
+
 def clasifica_euclidiana(k, pruebas, normalizado, entrenamiento):
     print("##########################################")
     print("               K=", k)
@@ -72,7 +101,7 @@ def clasifica_manhattan(k, pruebas, normalizado, entrenamiento):
     for index, renglon in pruebas.iterrows():
         renglon_normalizado = renglon.astype(float)
         renglon_normalizado = normaliza_renglon(renglon_normalizado,entrenamiento)
-        distancias = obten_distancias_euclidianas(renglon_normalizado,normalizado)
+        distancias = obten_distancias_manhattan(renglon_normalizado,normalizado)
         distancias = distancias.sort_values( by = 'Distancia',ascending=1)
         si = 0
         no = 0
@@ -100,7 +129,7 @@ def clasifica_suprema(k, pruebas, normalizado, entrenamiento):
     for index, renglon in pruebas.iterrows():
         renglon_normalizado = renglon.astype(float)
         renglon_normalizado = normaliza_renglon(renglon_normalizado,entrenamiento)
-        distancias = obten_distancias_euclidianas(renglon_normalizado,normalizado)
+        distancias = obten_distancias_suprema(renglon_normalizado,normalizado)
         distancias = distancias.sort_values( by = 'Distancia',ascending=1)
         si = 0
         no = 0
@@ -124,16 +153,6 @@ def clasifica_suprema(k, pruebas, normalizado, entrenamiento):
 
 
 
-
-
-
-
-
-
-
-
-
-
 ################################### INICIO ########################################
 #Leemos datos de entrenamiento
 entrenamiento = pd.read_csv("entrenamiento.csv")
@@ -153,7 +172,7 @@ for k in 1,3,5:
     print("______________________________MANHATTAN_____________________________")
     clasifica_manhattan(k,prueba,normalizado,entrenamiento)
     print("______________________________SUPREMA_______________________________")
-    clasifica_suprema(k,prueba,normalizado,entrenamie_nto)
+    clasifica_suprema(k,prueba,normalizado,entrenamiento)
 
 
 print("Fin de la corrida....")
