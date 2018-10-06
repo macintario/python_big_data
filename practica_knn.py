@@ -24,7 +24,7 @@ def normaliza_renglon(renglon,entrenamiento):
             renglon_normalizado[atributo] = normVal
     return renglon_normalizado
 
-def obten_distancias(renglon_normalizado,entrenaminento_normalizado):
+def obten_distancias_euclidianas(renglon_normalizado,entrenaminento_normalizado):
     distancias = pd.DataFrame(columns=["Indice","Distancia"])  # type: DataFrame
     dimensiones = entrenaminento_normalizado.columns
     for index, row in entrenaminento_normalizado.iterrows():
@@ -38,13 +38,13 @@ def obten_distancias(renglon_normalizado,entrenaminento_normalizado):
         distancias.loc[index, "Distancia"] = distancia_renglon
     return distancias
 
-def clasifica(k, pruebas, normalizado, entrenamiento):
+def clasifica_euclidiana(k, pruebas, normalizado, entrenamiento):
     print("##########################################")
     print("               K=", k)
     for index, renglon in pruebas.iterrows():
         renglon_normalizado = renglon.astype(float)
         renglon_normalizado = normaliza_renglon(renglon_normalizado,entrenamiento)
-        distancias = obten_distancias(renglon_normalizado,normalizado)
+        distancias = obten_distancias_euclidianas(renglon_normalizado,normalizado)
         distancias = distancias.sort_values( by = 'Distancia',ascending=1)
         si = 0
         no = 0
@@ -65,6 +65,75 @@ def clasifica(k, pruebas, normalizado, entrenamiento):
         print(renglon)
         print("Consejo:", consejo, " (SI", si, " vs NO", no,")")
 
+
+def clasifica_manhattan(k, pruebas, normalizado, entrenamiento):
+    print("##########################################")
+    print("               K=", k)
+    for index, renglon in pruebas.iterrows():
+        renglon_normalizado = renglon.astype(float)
+        renglon_normalizado = normaliza_renglon(renglon_normalizado,entrenamiento)
+        distancias = obten_distancias_euclidianas(renglon_normalizado,normalizado)
+        distancias = distancias.sort_values( by = 'Distancia',ascending=1)
+        si = 0
+        no = 0
+        for i in range (0, k):
+            inversion = entrenamiento.loc[distancias.loc[i,"Indice"],"Invertir"]
+            if inversion == "Si":
+                si += 1
+            else:
+                no += 1
+            #print(inversion)
+        if si > no :
+            consejo = "Si"
+        else:
+            consejo = "No"
+
+        print("**********************************************************")
+        print("Instancia ")
+        print(renglon)
+        print("Consejo:", consejo, " (SI", si, " vs NO", no,")")
+
+
+def clasifica_suprema(k, pruebas, normalizado, entrenamiento):
+    print("##########################################")
+    print("               K=", k)
+    for index, renglon in pruebas.iterrows():
+        renglon_normalizado = renglon.astype(float)
+        renglon_normalizado = normaliza_renglon(renglon_normalizado,entrenamiento)
+        distancias = obten_distancias_euclidianas(renglon_normalizado,normalizado)
+        distancias = distancias.sort_values( by = 'Distancia',ascending=1)
+        si = 0
+        no = 0
+        for i in range (0, k):
+            inversion = entrenamiento.loc[distancias.loc[i,"Indice"],"Invertir"]
+            if inversion == "Si":
+                si += 1
+            else:
+                no += 1
+            #print(inversion)
+        if si > no :
+            consejo = "Si"
+        else:
+            consejo = "No"
+
+        print("**********************************************************")
+        print("Instancia ")
+        print(renglon)
+        print("Consejo:", consejo, " (SI", si, " vs NO", no,")")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ################################### INICIO ########################################
 #Leemos datos de entrenamiento
 entrenamiento = pd.read_csv("entrenamiento.csv")
@@ -77,9 +146,14 @@ print(normalizado)
 
 #leemos los datos a clasificar
 prueba = pd.read_csv("prueba.csv")
-#efectuamos clasificación para k=1,3,5
+#efectuamos clasificación con distancia euclidiana para k=1,3,5
 for k in 1,3,5:
-    clasifica(k,prueba,normalizado,entrenamiento)
+    print("______________________________EUCLIDIANA____________________________")
+    clasifica_euclidiana(k,prueba,normalizado,entrenamiento)
+    print("______________________________MANHATTAN_____________________________")
+    clasifica_manhattan(k,prueba,normalizado,entrenamiento)
+    print("______________________________SUPREMA_______________________________")
+    clasifica_suprema(k,prueba,normalizado,entrenamie_nto)
 
 
 print("Fin de la corrida....")
